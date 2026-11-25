@@ -152,10 +152,30 @@ def _check_narrative(run: dict, cases: dict) -> None:
         raise ValueError(f"report prose no longer matches the run: {false}")
 
 
+def _price_answers(run: dict) -> list[str]:
+    """Every answer the model gave to the Genius price question: the scored run plus the
+    resamples. The hero says "$14.99 every time", so refuse to build if that's not true."""
+    scored = [r["answer"] for r in run["results"]
+              if r["system"] == "closed_book" and r["case"] == "price-genius"]
+    resamples = json.loads((ROOT / "results" / "closed_book_resamples.json").read_text())
+    answers = [a for a in scored + resamples["answers"]["price-genius"] if a.strip()]
+    if not answers or not all("14.99" in a for a in answers):
+        raise ValueError("not every price answer says $14.99; the hero claim is false")
+    return answers
+
+
+def _highlight_price(answer: str) -> str:
+    text = html.escape(answer.replace("**", "").strip())
+    return text.replace("$14.99", "<mark>$14.99</mark>")
+
+
 def build_story() -> str:
-    run, review, cases, _ = _load()
+    run, review, cases, corpus = _load()
     _check_narrative(run, cases)
     s = run["summary"]
+    price_answers = _price_answers(run)
+    if "Genius costs $39.99 a month" not in corpus["help-21583583733271"]["text"]:
+        raise ValueError("Albert's pricing article no longer says $39.99; the hero claim is stale")
     price = review["wrong"]["price-genius"]
     order = list(dict.fromkeys(r["case"] for r in run["results"]))
     passed = {(r["system"], r["case"]): r["grade"]["passed"] for r in run["results"]}
@@ -167,7 +187,10 @@ def build_story() -> str:
         "{{N}}": str(run["cases"]), "{{CB}}": str(s["closed_book"]["passed"]),
         "{{RAG}}": str(s["naive_rag"]["passed"]), "{{GR}}": str(s["grounded"]["passed"]),
         "{{PRICE_REPEAT}}": f'{price["resample_wrong"]} of {price["resample_valid"]}',
-        "{{REPO}}": REPO_URL,
+        "{{REPO}}": REPO_URL, "{{MODEL}}": html.escape(run["model"]),
+        "{{PRICE_URL}}": corpus["help-21583583733271"]["url"],
+        "{{PRICE_TOTAL}}": str(len(price_answers)),
+        "{{PRICE_ANSWERS}}": "".join(f"<li>{_highlight_price(a)}</li>" for a in price_answers),
         "{{RUN_AT}}": datetime.strptime(run["run_at"][:8], "%Y%m%d").strftime("%b %-d, %Y"),
     }
     for key, value in fills.items():

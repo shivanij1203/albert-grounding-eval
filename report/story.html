@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>An AI told me Albert Genius costs $14.99</title>
+<title>I asked an AI what Albert Genius costs. It said $14.99.</title>
 <meta name="description" content="{{N}} Albert customer questions, three ways of answering them, and what it took to get the money facts right.">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231548c0'/%3E%3Cpath d='M9 17l5 5 9-11' stroke='%23f2f4ff' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
@@ -92,12 +92,27 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4
 .steps{position:relative;z-index:1}
 .step{min-height:100vh;display:flex;align-items:center;padding:0 6vw}
 .card{max-width:460px;width:44vw}
+.hero .card{max-width:600px;width:48vw}
+.hero h1{font-size:clamp(38px,4.6vw,60px)}
+.hero .card p.cue{margin-top:28px}
 .eyebrow{display:block;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:22px}
 h1{font:600 clamp(40px,5.6vw,68px)/1.04 var(--serif);letter-spacing:-.02em;color:var(--navy);margin:0 0 24px;text-wrap:balance}
 h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;color:var(--navy);margin:0 0 16px;text-wrap:balance}
 .card p{margin:0 0 14px;color:var(--muted)}
 .card p b{color:var(--ink);font-weight:600}
 .lead{font-size:20px;line-height:1.5}
+.receipt{margin-top:24px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:14px;color:var(--muted);pointer-events:auto}
+.receipt > div{display:flex;gap:12px;padding:3px 0}
+.receipt span{flex:none;width:52px;font:500 11px/1.9 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.receipt details{margin-top:6px;border-top:1px solid var(--line);padding-top:8px}
+.receipt summary{cursor:pointer;font-weight:600;color:var(--blue);list-style:none}
+.receipt summary::-webkit-details-marker{display:none}
+.receipt summary::after{content:" +";}
+.receipt details[open] summary::after{content:" \2212";}
+.receipt summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+.receipt ol{margin:10px 0 2px;padding-left:20px;max-height:220px;overflow:auto}
+.receipt li{margin-bottom:8px;line-height:1.45}
+.receipt mark{background:var(--wrong-tint);color:var(--wrong);font-weight:600;padding:0 2px;border-radius:3px}
 .cue{margin-top:36px;font:500 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
 .num{font-variant-numeric:tabular-nums}
 
@@ -150,8 +165,17 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
   <section class="step hero" data-step="hero">
     <div class="card">
       <span class="eyebrow">A work sample by Shivani Jagannatham</span>
-      <h1>An AI told me Albert Genius costs $14.99.</h1>
-      <p class="lead">It costs $39.99. So I asked an AI {{N}} questions an Albert customer might ask, and checked every answer against what Albert publishes.</p>
+      <h1>I asked an AI what Albert Genius costs. It said $14.99.</h1>
+      <p class="lead">Albert charges $39.99. This wasn't Albert's own assistant. It was a general-purpose AI with no access to Albert's pages. So I asked it {{N}} questions an Albert customer might ask, and checked every answer against what Albert publishes.</p>
+      <div class="receipt">
+        <div><span>Asked</span>"How much does Albert Genius cost per month?"</div>
+        <div><span>Model</span>{{MODEL}}, on {{RUN_AT}}, {{PRICE_TOTAL}} times. $14.99 every time.</div>
+        <div><span>Albert</span><a href="{{PRICE_URL}}">"Genius costs $39.99 a month."</a> &nbsp;Albert's help center</div>
+        <details>
+          <summary>Read all {{PRICE_TOTAL}} answers</summary>
+          <ol>{{PRICE_ANSWERS}}</ol>
+        </details>
+      </div>
       <p class="cue">Scroll to see what fixed it &darr;</p>
     </div>
   </section>
@@ -159,7 +183,7 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
   <section class="step" data-step="ask">
     <div class="card">
       <h2>On its own, it got <span class="num">{{CB}}</span> of <span class="num">{{N}}</span> right.</h2>
-      <p>And it wasn't a fluke. Asked again, it said $14.99 in <b>{{PRICE_REPEAT}}</b> tries. It also capped advances at $250 (Albert says $1,000) and said they're due on payday (Albert says 6 days).</p>
+      <p>It also capped advances at $250 (Albert says $1,000) and said they're due on payday (Albert says 6 days). No one ships an assistant like this, but it's what the AI falls back on whenever it can't find the right page.</p>
     </div>
   </section>
 
@@ -179,8 +203,8 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
 
   <section class="step" data-step="instant">
     <div class="card">
-      <h2>The biggest problem wasn't the AI.</h2>
-      <p>Albert uses <b>"Instant"</b> for three products with different fees, and the help pages don't say which one they mean. Given both pages, the AI told a customer that Albert's own pages contradict each other.</p>
+      <h2>The most useful finding wasn't about the AI.</h2>
+      <p>Albert uses <b>"Instant"</b> for three products with different fees, and the help pages don't say which one they mean. Given both pages, the AI would tell a customer that Albert's own pages contradict each other.</p>
       <p>A product tag on each article would fix it for any assistant.</p>
     </div>
   </section>

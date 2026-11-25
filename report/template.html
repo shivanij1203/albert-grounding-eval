@@ -228,7 +228,7 @@ footer p{max-width:var(--measure)}
     <p class="prose">So "Are there late fees if I pay my Instant advance back late?" has two correct answers, depending on the product. The three versions answered three different ways:</p>
     <ul class="split">
       <li><b>AI on its own</b>"No," with no qualification.</li>
-      <li><b>Reading the help pages</b>It found both pages and told the customer that Albert's help article "conflicts with the disclosures." It read two products as one contradictory one.</li>
+      <li><b>Reading the help pages</b>It found both pages and would have told the customer that Albert's help article "conflicts with the disclosures." It read two products as one contradictory one.</li>
       <li><b>Reading and quoting</b>It separated the two products, but only because I told it in its instructions that they are different. The lasting fix belongs in the help articles.</li>
     </ul>
     <p class="caveat"><b>Where this matters, and where it may not.</b> An assistant that knows which product a customer holds, as one inside the app likely does, can choose the right terms. The ambiguity matters where that context is missing: a customer who isn't signed in, the help-center search box, and any AI that looks up pages without knowing the customer's product. Calling line-of-credit draws "advances" may well be deliberate in the app. The gap is that the public articles don't say which product they describe.</p>
@@ -290,7 +290,7 @@ footer p{max-width:var(--measure)}
     <ol class="method">
       <li><b>Sources.</b> {{SOURCES}} public documents: all 147 articles from Albert's public help center API and the 9 legal disclosures in the albert.com footer, fetched read-only on 2026-11-25.</li>
       <li><b>Questions.</b> {{N}} questions, each with the facts a correct answer must contain and the claims that make it wrong, taken from a named source. {{REFUSE}} must be handed off: a personal limit, investment advice, an unsupported product, and a competitor.</li>
-      <li><b>Systems.</b> All three use the same model ({{MODEL}}). Both retrieval systems get the same {{K}} passages from BM25 over overlapping windows, with no tuning against these questions.</li>
+      <li><b>Systems.</b> All three use the same model ({{MODEL}}). Both retrieval systems get the same {{K}} passages from BM25 over overlapping windows, with no tuning against these questions. Keyword search was a deliberate choice to keep the baseline simple and inspectable; a semantic search would likely fix the "cancel" miss.</li>
       <li><b>Grading.</b> Regular expressions for required and forbidden facts, plus a word-for-word quote check. Every grader change made after seeing output is listed in <code>evalset/CHANGELOG.md</code>. Hover a failure reason to see the exact rule.</li>
       <li><b>Limits.</b> One run of one model, on public content only, at the API's default sampling, so differences of a question or two are noise. It says nothing about Genius's actual behavior, which needs account access I don't have. Pattern grading can miss a correct paraphrase. I read every failure to catch that, and fixed the patterns where it happened.</li>
     </ol>
