@@ -1,0 +1,132 @@
+{
+ "reviewer": "hand review of the closed_book run, 2026-11-25",
+ "labels": {
+  "wrong": {
+   "price-genius": {
+    "said": "Albert Genius currently costs about $14.99 per month",
+    "fact": "Published price is $39.99 a month.",
+    "hedged": false,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "sub-required-advance": {
+    "said": "Subscription status can affect advance amounts and delivery options",
+    "fact": "A subscription has no impact on the amount you're eligible for.",
+    "hedged": false,
+    "resample_wrong": 1,
+    "resample_valid": 4,
+    "stable": false
+   },
+   "adv-max": {
+    "said": "With Albert Instant, you can get an advance of up to $250.",
+    "fact": "Instant Advance limits range from $25 to $1,000.",
+    "hedged": false,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "adv-over-limit": {
+    "said": "Albert's Instant Advances go up to $250, even for accounts with great history.",
+    "fact": "The cap is $1,000, and few qualify for it.",
+    "hedged": false,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "adv-due": {
+    "said": "Albert cash advances are generally due on your next payday",
+    "fact": "Cash advances are due 6 days from when you advance.",
+    "hedged": false,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "adv-frequency": {
+    "said": "Albert doesn't set a fixed number of advances per month that I can confirm.",
+    "fact": "Up to 6 advances in a 30 day period.",
+    "hedged": true,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "adv-smart-money": {
+    "said": "As far as I know, they're separate features",
+    "fact": "Smart money on the Automatic schedule is required for Instant.",
+    "hedged": true,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "fee-loan-late": {
+    "said": "Albert doesn't charge late fees or interest on its cash advances.",
+    "fact": "Asked about loans. Loans carry late fees up to $10.",
+    "hedged": false,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "cancel-how": {
+    "said": "opening the Genius tab, going to your Genius settings, and selecting Cancel Genius",
+    "fact": "Cancel by deactivating, after Savings and Investing are at $0.",
+    "hedged": false,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "cancel-refund": {
+    "said": "eligibility is reviewed case by case by our support team",
+    "fact": "No refunds on monthly subscriptions.",
+    "hedged": false,
+    "resample_wrong": 4,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "cancel-zero-savings": {
+    "said": "You shouldn't need to empty your savings to cancel Genius",
+    "fact": "Savings and Investing must be brought to $0 first.",
+    "hedged": false,
+    "resample_wrong": 2,
+    "resample_valid": 4,
+    "stable": false
+   },
+   "loan-range": {
+    "said": "Albert's Instant cash advances are typically available in amounts up to $250",
+    "fact": "Loans range from $1,000 to $10,000.",
+    "hedged": false,
+    "resample_wrong": 5,
+    "resample_valid": 5,
+    "stable": true
+   },
+   "genius-advisor": {
+    "said": "Geniuses are finance-knowledgeable team members",
+    "fact": "Genius is an AI assistant and is not a financial advisor.",
+    "hedged": false,
+    "resample_wrong": 2,
+    "resample_valid": 4,
+    "stable": false
+   }
+  },
+  "incomplete": {
+   "adv-late-fees": "Right for the Instant Advance, silent on the line of credit, which can charge late fees.",
+   "adv-missed-payment": "Omits the published suspension periods.",
+   "fee-fast-transfer": "Says the fee varies and attaches it to advances; omits the $5.99 / 1.75% / $25 cap formula."
+  },
+  "hedge": {
+   "price-standard": "",
+   "price-false-premise": "Declines to confirm or correct $14.99.",
+   "price-trial": "",
+   "price-family": "",
+   "adv-extension": "",
+   "adv-collections": "",
+   "fee-atm": "",
+   "fee-overdraft-reimb": "",
+   "acct-google-voice": ""
+  },
+  "off_scope": {
+   "oos-crypto": "States Albert has no crypto with no source; plausible but unverified.",
+   "oos-competitor": "Answers a question about Chime's product as Albert's assistant."
+  }
+ },
+ "resample_note": "Each wrong case was asked 5 more times (results/closed_book_resamples.json) and judged by hand. 3 of the 65 resamples came back empty or cut off and are excluded from the counts. A claim is stable if it recurs in at least 80% of usable resamples."
+}

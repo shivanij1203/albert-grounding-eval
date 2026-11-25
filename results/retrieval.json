@@ -1,0 +1,748 @@
+{
+  "recall_at_k": {
+    "6": 0.918918918918919,
+    "8": 0.972972972972973
+  },
+  "rows": [
+    {
+      "case": "price-genius",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-21583583733271",
+        "help-21583583733271",
+        "help-230680267"
+      ]
+    },
+    {
+      "case": "price-genius",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-21583583733271",
+        "help-21583583733271",
+        "help-230680267"
+      ]
+    },
+    {
+      "case": "price-standard",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-21583583733271",
+        "help-21583583733271",
+        "help-32005754647063"
+      ]
+    },
+    {
+      "case": "price-standard",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-21583583733271",
+        "help-21583583733271",
+        "help-32005754647063"
+      ]
+    },
+    {
+      "case": "price-false-premise",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-36895802722199",
+        "help-36895802722199",
+        "help-21583583733271"
+      ]
+    },
+    {
+      "case": "price-false-premise",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-36895802722199",
+        "help-36895802722199",
+        "help-21583583733271"
+      ]
+    },
+    {
+      "case": "price-trial",
+      "k": 6,
+      "hit": false,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-16791660592663"
+      ]
+    },
+    {
+      "case": "price-trial",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-16791660592663"
+      ]
+    },
+    {
+      "case": "price-family",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-27830551832343",
+        "help-27830551832343",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "price-family",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-27830551832343",
+        "help-27830551832343",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "sub-required-advance",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "disc-instant-advance",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "sub-required-advance",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "disc-instant-advance",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-max",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-40060242574743",
+        "help-40059313140247",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-max",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-40060242574743",
+        "help-40059313140247",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-promise-1000",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-43863805395991",
+        "help-4406765438871",
+        "help-1500009168682"
+      ]
+    },
+    {
+      "case": "adv-promise-1000",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-43863805395991",
+        "help-4406765438871",
+        "help-1500009168682"
+      ]
+    },
+    {
+      "case": "adv-over-limit",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-360041602433",
+        "help-40060242574743",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-over-limit",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-360041602433",
+        "help-40060242574743",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-interest",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "disc-instant-advance",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-interest",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "disc-instant-advance",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-late-fees",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "disc-instant-advance",
+        "help-16768060313111",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-late-fees",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "disc-instant-advance",
+        "help-16768060313111",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-missed-payment",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-40060432888471",
+        "help-40060432888471",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-missed-payment",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-40060432888471",
+        "help-40060432888471",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "adv-due",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-360041602373",
+        "help-360041602373",
+        "help-40060432888471"
+      ]
+    },
+    {
+      "case": "adv-due",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-360041602373",
+        "help-360041602373",
+        "help-40060432888471"
+      ]
+    },
+    {
+      "case": "adv-extension",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-40060432888471",
+        "help-16768060313111",
+        "help-360041602373"
+      ]
+    },
+    {
+      "case": "adv-extension",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-40060432888471",
+        "help-16768060313111",
+        "help-360041602373"
+      ]
+    },
+    {
+      "case": "adv-credit-check",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-40059940835863"
+      ]
+    },
+    {
+      "case": "adv-credit-check",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-40059940835863"
+      ]
+    },
+    {
+      "case": "adv-frequency",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-360041602373",
+        "help-360036144013"
+      ]
+    },
+    {
+      "case": "adv-frequency",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-360041602373",
+        "help-360036144013"
+      ]
+    },
+    {
+      "case": "adv-collections",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-360041602373"
+      ]
+    },
+    {
+      "case": "adv-collections",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-360041602373"
+      ]
+    },
+    {
+      "case": "adv-smart-money",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16987886331287",
+        "help-16987886331287"
+      ]
+    },
+    {
+      "case": "adv-smart-money",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16987886331287",
+        "help-16987886331287"
+      ]
+    },
+    {
+      "case": "fee-fast-transfer",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-17310275700375",
+        "help-21583583733271",
+        "help-32005754647063"
+      ]
+    },
+    {
+      "case": "fee-fast-transfer",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-17310275700375",
+        "help-21583583733271",
+        "help-32005754647063"
+      ]
+    },
+    {
+      "case": "fee-ach",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-17310275700375",
+        "help-16795407078423",
+        "help-1500009169922"
+      ]
+    },
+    {
+      "case": "fee-ach",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-17310275700375",
+        "help-16795407078423",
+        "help-1500009169922"
+      ]
+    },
+    {
+      "case": "fee-atm",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16789410778391",
+        "help-45254853773975",
+        "help-16791660592663"
+      ]
+    },
+    {
+      "case": "fee-atm",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16789410778391",
+        "help-45254853773975",
+        "help-16791660592663"
+      ]
+    },
+    {
+      "case": "fee-overdraft-reimb",
+      "k": 6,
+      "hit": false,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-16987886331287"
+      ]
+    },
+    {
+      "case": "fee-overdraft-reimb",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-16987886331287"
+      ]
+    },
+    {
+      "case": "fee-loan-late",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-33812001307159",
+        "help-33812001307159",
+        "help-33812022090775"
+      ]
+    },
+    {
+      "case": "fee-loan-late",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-33812001307159",
+        "help-33812001307159",
+        "help-33812022090775"
+      ]
+    },
+    {
+      "case": "cancel-how",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-360005411894"
+      ]
+    },
+    {
+      "case": "cancel-how",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16768060313111",
+        "help-16768060313111",
+        "help-360005411894"
+      ]
+    },
+    {
+      "case": "cancel-refund",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-360006239013",
+        "help-36895802722199",
+        "help-115002423774"
+      ]
+    },
+    {
+      "case": "cancel-refund",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-360006239013",
+        "help-36895802722199",
+        "help-115002423774"
+      ]
+    },
+    {
+      "case": "cancel-pause-smart",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-360006239013",
+        "help-16987886331287",
+        "help-16987886331287"
+      ]
+    },
+    {
+      "case": "cancel-pause-smart",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-360006239013",
+        "help-16987886331287",
+        "help-16987886331287"
+      ]
+    },
+    {
+      "case": "cancel-owe-advance",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-360005411894",
+        "help-32005754647063",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "cancel-owe-advance",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-360005411894",
+        "help-32005754647063",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "cancel-zero-savings",
+      "k": 6,
+      "hit": false,
+      "top": [
+        "help-16768060313111",
+        "help-32545358184855",
+        "help-32545297625367"
+      ]
+    },
+    {
+      "case": "cancel-zero-savings",
+      "k": 8,
+      "hit": false,
+      "top": [
+        "help-16768060313111",
+        "help-32545358184855",
+        "help-32545297625367"
+      ]
+    },
+    {
+      "case": "loan-range",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-40059940835863",
+        "help-226371447",
+        "help-40060432888471"
+      ]
+    },
+    {
+      "case": "loan-range",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-40059940835863",
+        "help-226371447",
+        "help-40060432888471"
+      ]
+    },
+    {
+      "case": "loan-rate-type",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-230636488",
+        "help-230636488",
+        "help-33811979344791"
+      ]
+    },
+    {
+      "case": "loan-rate-type",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-230636488",
+        "help-230636488",
+        "help-33811979344791"
+      ]
+    },
+    {
+      "case": "loan-credit-pull",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-226371447",
+        "help-226371447",
+        "help-33812022090775"
+      ]
+    },
+    {
+      "case": "loan-credit-pull",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-226371447",
+        "help-226371447",
+        "help-33812022090775"
+      ]
+    },
+    {
+      "case": "acct-google-voice",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-360010938174",
+        "help-360010938634",
+        "help-16770180178583"
+      ]
+    },
+    {
+      "case": "acct-google-voice",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-360010938174",
+        "help-360010938634",
+        "help-16770180178583"
+      ]
+    },
+    {
+      "case": "acct-early-pay",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-1500009168682",
+        "help-1500009184681",
+        "help-4411794968727"
+      ]
+    },
+    {
+      "case": "acct-early-pay",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-1500009168682",
+        "help-1500009184681",
+        "help-4411794968727"
+      ]
+    },
+    {
+      "case": "acct-fdic",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-16797473926039",
+        "help-16768060313111",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "acct-fdic",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-16797473926039",
+        "help-16768060313111",
+        "help-16768060313111"
+      ]
+    },
+    {
+      "case": "acct-age",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-32005754647063",
+        "help-360011034573",
+        "help-16789410778391"
+      ]
+    },
+    {
+      "case": "acct-age",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-32005754647063",
+        "help-360011034573",
+        "help-16789410778391"
+      ]
+    },
+    {
+      "case": "genius-advisor",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-36895802722199",
+        "help-36895802722199",
+        "disc-investing"
+      ]
+    },
+    {
+      "case": "genius-advisor",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-36895802722199",
+        "help-36895802722199",
+        "disc-investing"
+      ]
+    },
+    {
+      "case": "loan-my-apr",
+      "k": 6,
+      "hit": true,
+      "top": [
+        "help-40060104266391",
+        "help-16768060313111",
+        "help-226371447"
+      ]
+    },
+    {
+      "case": "loan-my-apr",
+      "k": 8,
+      "hit": true,
+      "top": [
+        "help-40060104266391",
+        "help-16768060313111",
+        "help-226371447"
+      ]
+    }
+  ]
+}

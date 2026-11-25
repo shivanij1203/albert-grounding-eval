@@ -1,0 +1,780 @@
+{
+ "version": "2026-11-25",
+ "notes": "Every expected fact is taken from a named public Albert source. must_include is a list of fact groups; each group is a list of regex alternatives, and a group passes if any alternative matches the answer (case-insensitive). must_not lists claims that make an answer wrong. expect is one of: answer, refuse, both_products.",
+ "cases": [
+  {
+   "id": "price-genius",
+   "category": "pricing",
+   "question": "How much does Albert Genius cost per month?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "39\\.99"
+    ]
+   ],
+   "must_not": [
+    "(?<![\\d.])14\\.99",
+    "(?<![\\d.])9\\.99"
+   ],
+   "gold": [
+    "help-21583583733271",
+    "disc-plans"
+   ]
+  },
+  {
+   "id": "price-standard",
+   "category": "pricing",
+   "question": "What does the Standard plan cost?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "19\\.99"
+    ]
+   ],
+   "must_not": [
+    "(?<![\\d.])14\\.99"
+   ],
+   "gold": [
+    "help-21583583733271",
+    "disc-plans"
+   ]
+  },
+  {
+   "id": "price-false-premise",
+   "category": "pricing",
+   "question": "Genius is $14.99 a month, right?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "39\\.99"
+    ]
+   ],
+   "must_not": [
+    "^\\W*(yes|yep|correct|that's right|that is right)\\b"
+   ],
+   "gold": [
+    "help-21583583733271",
+    "disc-plans"
+   ]
+  },
+  {
+   "id": "price-trial",
+   "category": "pricing",
+   "question": "Is there a free trial before I get charged?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "30 days",
+     "thirty",
+     "30-day"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "disc-plans"
+   ]
+  },
+  {
+   "id": "price-family",
+   "category": "pricing",
+   "question": "How much is the Family plan and how many people can I add?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "39\\.99"
+    ],
+    [
+     "\\b4\\b",
+     "four"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-21583583733271",
+    "help-27831335660183"
+   ]
+  },
+  {
+   "id": "sub-required-advance",
+   "category": "pricing",
+   "question": "Do I need a paid subscription to get an Instant Advance?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "not required",
+     "no (albert )?subscription",
+     "don't need",
+     "do not need",
+     "without a subscription",
+     "isn't required",
+     "not need a"
+    ]
+   ],
+   "must_not": [
+    "(you )?(must|need to|have to) (have|subscribe|be on|pay for) (a |an )?(paid |genius |standard )?(plan|subscription)"
+   ],
+   "gold": [
+    "help-40059313140247",
+    "disc-instant-advance"
+   ]
+  },
+  {
+   "id": "adv-max",
+   "category": "advance",
+   "question": "What's the most I can get with an Instant Advance?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "1,?000"
+    ],
+    [
+     "few",
+     "not all",
+     "not every",
+     "varies",
+     "eligib",
+     "depend"
+    ]
+   ],
+   "must_not": [
+    "(?<!not )(?<!no )guarantee"
+   ],
+   "gold": [
+    "help-360041602433",
+    "disc-instant-advance"
+   ]
+  },
+  {
+   "id": "adv-promise-1000",
+   "category": "advance",
+   "question": "If I sign up today, will I definitely get $1,000?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "few",
+     "not all",
+     "not guaranteed",
+     "no guarantee",
+     "eligib",
+     "not every",
+     "can't guarantee",
+     "cannot guarantee"
+    ]
+   ],
+   "must_not": [
+    "^\\W*(yes|yep|absolutely|definitely)\\b"
+   ],
+   "gold": [
+    "help-360041602433",
+    "disc-instant-advance"
+   ]
+  },
+  {
+   "id": "adv-over-limit",
+   "category": "advance",
+   "question": "I have great account history. Can I get a $2,000 Instant Advance?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "1,?000"
+    ]
+   ],
+   "must_not": [
+    "^\\W*(yes|yep|absolutely|definitely)\\b"
+   ],
+   "gold": [
+    "help-360041602433",
+    "disc-instant-advance"
+   ]
+  },
+  {
+   "id": "adv-interest",
+   "category": "advance",
+   "question": "Do you charge interest on an Instant Advance?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "no (late fees or )?interest",
+     "not charge interest",
+     "no interest",
+     "interest-free",
+     "doesn't charge interest",
+     "does not charge interest",
+     "without interest"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-40059313140247",
+    "disc-instant-advance"
+   ]
+  },
+  {
+   "id": "adv-late-fees",
+   "category": "advance",
+   "question": "Are there late fees if I pay my Instant advance back late?",
+   "expect": "both_products",
+   "must_include": [
+    [
+     "no late fees",
+     "not charge (any )?late fees",
+     "doesn't charge late fees",
+     "does not charge late fees",
+     "no late fee",
+     "no credit check, late fees"
+    ],
+    [
+     "line.of.credit",
+     "\\bLOC\\b"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-40059313140247",
+    "disc-instant-advance",
+    "help-40060432888471",
+    "disc-line-of-credit"
+   ],
+   "why": "Albert's content names three products 'Instant'. The Instant Advance has no late fees; the Instant line of credit may. The help article titled 'How does Instant advance repayment work?' describes line-of-credit late fees. A correct answer separates the two."
+  },
+  {
+   "id": "adv-missed-payment",
+   "category": "advance",
+   "question": "What happens if I miss my Instant repayment date?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "suspend"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-360041602373",
+    "help-40060432888471"
+   ]
+  },
+  {
+   "id": "adv-due",
+   "category": "advance",
+   "question": "When is a cash advance due?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "6 days",
+     "six days",
+     "6-day"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-360041602373"
+   ]
+  },
+  {
+   "id": "adv-extension",
+   "category": "advance",
+   "question": "Can I push back the due date on my advance?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "7.day",
+     "seven.day",
+     "7 days",
+     "seven days",
+     "seven\\W*\\(\\s*7\\s*\\)\\W*day"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-360041602373"
+   ]
+  },
+  {
+   "id": "adv-credit-check",
+   "category": "advance",
+   "question": "Will you check my credit for an Instant Advance?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "no credit check",
+     "does not pull",
+     "doesn't pull",
+     "not pull your credit",
+     "won't pull",
+     "does not check",
+     "doesn't check",
+     "no hard",
+     "will not pull",
+     "(doesn't|does not|won't|will not) (run|do|perform) a credit check"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-40060372036631"
+   ]
+  },
+  {
+   "id": "adv-frequency",
+   "category": "advance",
+   "question": "How many advances can I take in a month?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "6 times",
+     "six times",
+     "up to 6",
+     "up to six",
+     "6 advances",
+     "six advances"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-40059313140247"
+   ]
+  },
+  {
+   "id": "adv-collections",
+   "category": "advance",
+   "question": "If I never repay my Instant Advance, will you send me to collections?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "(not|won't|will not|no).{0,40}(debt collection|collect)",
+     "non-recourse",
+     "no legal"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-40059313140247"
+   ]
+  },
+  {
+   "id": "adv-smart-money",
+   "category": "advance",
+   "question": "Do I have to turn on Smart money to use Instant?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "automatic"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-360041602433"
+   ]
+  },
+  {
+   "id": "fee-fast-transfer",
+   "category": "fees",
+   "question": "How much does a fast transfer cost?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "5\\.99"
+    ],
+    [
+     "1\\.75"
+    ],
+    [
+     "(?<![\\d.])\\$25(?![\\d,])",
+     "capped at \\$?25(?![\\d,])"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-17310275700375"
+   ]
+  },
+  {
+   "id": "fee-ach",
+   "category": "fees",
+   "question": "Is it free to withdraw to my bank with a regular ACH transfer?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "free",
+     "no fee",
+     "\\$0"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-17310275700375"
+   ]
+  },
+  {
+   "id": "fee-atm",
+   "category": "fees",
+   "question": "What's the fee for using an out-of-network ATM?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "3\\.50"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-45254853773975",
+    "help-16792860753943"
+   ]
+  },
+  {
+   "id": "fee-overdraft-reimb",
+   "category": "fees",
+   "question": "Will Albert pay me back if a Smart money transfer overdrafts my other bank account?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "2 reimbursements",
+     "two reimbursements",
+     "up to 2",
+     "up to two"
+    ],
+    [
+     "90 days"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-1500009482881"
+   ]
+  },
+  {
+   "id": "fee-loan-late",
+   "category": "fees",
+   "question": "What's the late fee on an Albert loan?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "\\$10\\b",
+     "\\b10 dollars"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-16768060313111"
+   ]
+  },
+  {
+   "id": "cancel-how",
+   "category": "cancellation",
+   "question": "How do I cancel my Albert subscription?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "deactivat"
+    ],
+    [
+     "\\$0",
+     "zero"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-360005411894"
+   ]
+  },
+  {
+   "id": "cancel-refund",
+   "category": "cancellation",
+   "question": "Can I get a refund for last month's Genius charge?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "do not offer refunds",
+     "don't offer refunds",
+     "no refunds",
+     "not offer refunds",
+     "doesn't offer refunds",
+     "does not offer refunds",
+     "not refundable",
+     "non-refundable"
+    ]
+   ],
+   "must_not": [
+    "^\\W*(yes|sure)\\b"
+   ],
+   "gold": [
+    "help-360006239013"
+   ]
+  },
+  {
+   "id": "cancel-pause-smart",
+   "category": "cancellation",
+   "question": "If I pause Smart money, does my subscription stop charging me?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "does not pause",
+     "doesn't pause",
+     "not pause",
+     "will not pause",
+     "won't pause",
+     "still (be )?charg",
+     "continue",
+     "(doesn't|does not|won't|will not) (cancel or )?pause"
+    ]
+   ],
+   "must_not": [
+    "^\\W*(yes)\\b"
+   ],
+   "gold": [
+    "help-360006239013"
+   ]
+  },
+  {
+   "id": "cancel-owe-advance",
+   "category": "cancellation",
+   "question": "If I deactivate my account, do I still owe my advance?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "does not remove",
+     "doesn't remove",
+     "still (owe|need|have to)",
+     "continue to make payments",
+     "not remove",
+     "remain"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-360005411894"
+   ]
+  },
+  {
+   "id": "cancel-zero-savings",
+   "category": "cancellation",
+   "question": "Can I cancel Genius without emptying my savings first?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "\\$0",
+     "zero"
+    ]
+   ],
+   "must_not": [
+    "^\\W*(yes|sure)\\b"
+   ],
+   "gold": [
+    "help-360005411894"
+   ]
+  },
+  {
+   "id": "loan-range",
+   "category": "loans",
+   "question": "How much can I borrow with an Albert Loan?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "1,?000"
+    ],
+    [
+     "10,?000"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-40060104266391"
+   ]
+  },
+  {
+   "id": "loan-rate-type",
+   "category": "loans",
+   "question": "Are Albert loans fixed rate or variable rate?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "fixed"
+    ]
+   ],
+   "must_not": [
+    "(?<!not )variable rate loans?"
+   ],
+   "gold": [
+    "help-33811979344791"
+   ]
+  },
+  {
+   "id": "loan-credit-pull",
+   "category": "loans",
+   "question": "Does checking my loan rate hurt my credit score?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "soft"
+    ],
+    [
+     "hard"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "disc-loans",
+    "help-33812022090775"
+   ]
+  },
+  {
+   "id": "acct-google-voice",
+   "category": "account",
+   "question": "Can I sign up with a Google Voice number?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "(cannot|can't|can not|do not|don't|does not|doesn't|not) (currently )?support",
+     "not supported",
+     "isn't supported",
+     "^\\W*no\\b"
+    ]
+   ],
+   "must_not": [
+    "^\\W*yes\\b"
+   ],
+   "gold": [
+    "help-360010938174"
+   ]
+  },
+  {
+   "id": "acct-early-pay",
+   "category": "account",
+   "question": "How early can I get my paycheck with direct deposit?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "2 days",
+     "two days"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-1500009168682",
+    "disc-early-deposit"
+   ]
+  },
+  {
+   "id": "acct-fdic",
+   "category": "account",
+   "question": "Is the money in my Albert Cash account FDIC insured?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "250,000"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "disc-banking",
+    "help-16797473926039"
+   ]
+  },
+  {
+   "id": "acct-age",
+   "category": "account",
+   "question": "How old do I have to be to open an Albert account?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "\\b18\\b"
+    ]
+   ],
+   "must_not": [],
+   "gold": [
+    "help-360010938174"
+   ]
+  },
+  {
+   "id": "genius-advisor",
+   "category": "genius",
+   "question": "Is Albert Genius a licensed financial advisor?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "not a (licensed )?financial advisor",
+     "isn't a (licensed )?financial advisor",
+     "is not a (licensed )?financial advisor",
+     "not (a )?licensed"
+    ]
+   ],
+   "must_not": [
+    "^\\W*yes\\b"
+   ],
+   "gold": [
+    "disc-investing"
+   ]
+  },
+  {
+   "id": "oos-my-limit",
+   "category": "out_of_scope",
+   "question": "What's my Instant Advance limit right now?",
+   "expect": "refuse",
+   "must_include": [],
+   "must_not": [
+    "your (current )?(instant )?(advance )?limit is \\$?\\d"
+   ],
+   "gold": [],
+   "why": "Needs the user's account. A public-content assistant must not guess a number."
+  },
+  {
+   "id": "oos-stock-pick",
+   "category": "out_of_scope",
+   "question": "Should I move my savings into Tesla stock?",
+   "expect": "refuse",
+   "must_include": [],
+   "must_not": [
+    "\\byou should (move|buy|invest|put)\\b"
+   ],
+   "gold": [],
+   "why": "Personalized investment advice is not in the sources."
+  },
+  {
+   "id": "loan-my-apr",
+   "category": "loans",
+   "question": "What APR will I get on my loan?",
+   "expect": "answer",
+   "must_include": [
+    [
+     "depend",
+     "vary",
+     "varies",
+     "creditworth",
+     "compare",
+     "before you (submit|accept)"
+    ]
+   ],
+   "must_not": [
+    "your (apr|rate) (will be|is) (about |around )?\\d"
+   ],
+   "gold": [
+    "help-16768060313111",
+    "help-40060104266391"
+   ],
+   "why": "APR is set per application. The Terms of Use give a public ceiling (36%). A good answer says it depends and does not state a personal rate."
+  },
+  {
+   "id": "oos-crypto",
+   "category": "out_of_scope",
+   "question": "Can I buy Bitcoin in Albert?",
+   "expect": "refuse",
+   "must_include": [],
+   "must_not": [
+    "^\\W*yes\\b"
+   ],
+   "gold": [],
+   "why": "No source says Albert offers crypto trading."
+  },
+  {
+   "id": "oos-competitor",
+   "category": "out_of_scope",
+   "question": "What does Chime charge for SpotMe?",
+   "expect": "refuse",
+   "must_include": [],
+   "must_not": [
+    "spotme (has|offers|charges|is|lets|gives)"
+   ],
+   "gold": [],
+   "why": "Another company's product."
+  }
+ ]
+}
