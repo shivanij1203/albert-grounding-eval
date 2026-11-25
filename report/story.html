@@ -148,11 +148,12 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
     <div class="card">
       <span class="eyebrow">A work sample by Shivani Jagannatham</span>
       <h1>I asked an AI what Albert Genius costs. It said $14.99.</h1>
-      <p class="lead">Albert charges $39.99. This wasn't Albert's own assistant. It was a general-purpose AI with no access to Albert's pages. So I asked it {{N}} questions an Albert customer might ask, and checked every answer against what Albert publishes.</p>
+      <p class="lead">Albert charges $39.99. The AI wasn't making it up: Albert's own Genius page listed <a href="{{ARCHIVE_URL}}">$14.99 a month in 2024</a>. An AI answering from memory still says it. This wasn't Albert's assistant, just a general-purpose AI with no access to Albert's pages. So I asked it {{N}} questions an Albert customer might ask, and checked every answer against what Albert publishes now.</p>
       <div class="receipt">
         <div><span>Asked</span>"How much does Albert Genius cost per month?"</div>
         <div><span>Model</span>{{MODEL}}, on {{RUN_AT}}, {{PRICE_TOTAL}} times. $14.99 every time.</div>
-        <div><span>Albert</span><a href="{{PRICE_URL}}">"Genius costs $39.99 a month."</a> &nbsp;Albert's help center</div>
+        <div><span>Albert</span><a href="{{PRICE_URL}}">"Genius costs $39.99 a month."</a> &nbsp;Albert's help center, today</div>
+        <div><span>Before</span><a href="{{ARCHIVE_URL}}">"costs $14.99/month"</a> &nbsp;albert.com/genius, archived May 2024</div>
         <details>
           <summary>Read all {{PRICE_TOTAL}} answers</summary>
           <ol>{{PRICE_ANSWERS}}</ol>
@@ -165,7 +166,7 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
   <section class="step" data-step="ask">
     <div class="card">
       <h2>On its own, it got <span class="num">{{CB}}</span> of <span class="num">{{N}}</span> right.</h2>
-      <p>It also capped advances at $250 (Albert says $1,000) and said they're due on payday (Albert says 6 days). No one ships an assistant like this, but it's what the AI falls back on whenever it can't find the right page.</p>
+      <p>It also capped advances at $250 (Albert now says $1,000) and said they're due on payday (Albert says 6 days). The $14.99 and the $250 were both on Albert's site in 2024. A model trained on the old web keeps repeating them, and that's what any assistant falls back on whenever it can't find the right page.</p>
     </div>
   </section>
 

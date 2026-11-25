@@ -15,6 +15,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PRICE_ARTICLE = "help-21583583733271"
+ARCHIVE_URL = "https://web.archive.org/web/20240505195442/https://albert.com/genius"
+ARCHIVE_TEXT = "data/wayback_albert_genius_20240505.txt"
 SYSTEMS = ("closed_book", "naive_rag", "grounded")
 
 
@@ -43,6 +45,10 @@ def _check_narrative(run: dict, corpus: dict) -> None:
         "quoting and page reading differ by at most one question": abs(
             run["summary"]["grounded"]["passed"] - run["summary"]["naive_rag"]["passed"]) <= 1,
         "Albert's price article still says $39.99": "Genius costs $39.99 a month" in corpus[PRICE_ARTICLE]["text"],
+        "Albert's archived 2024 Genius page said $14.99/month": "costs $14.99/month"
+            in (ROOT / ARCHIVE_TEXT).read_text(),
+        "Albert's archived 2024 page capped limits at $250": "range from $25 to $250"
+            in (ROOT / ARCHIVE_TEXT).read_text(),
         "the Terms still require $0 balances to cancel": "balance of $0 to cancel your Albert Subscription"
             in corpus["help-16768060313111"]["text"],
     }
@@ -130,7 +136,7 @@ def build_story() -> str:
         "{{CB}}": str(summary["closed_book"]["passed"]),
         "{{RAG}}": str(summary["naive_rag"]["passed"]), "{{GR}}": str(summary["grounded"]["passed"]),
         "{{MODEL}}": html.escape(run["model"]),
-        "{{PRICE_URL}}": corpus[PRICE_ARTICLE]["url"],
+        "{{PRICE_URL}}": corpus[PRICE_ARTICLE]["url"], "{{ARCHIVE_URL}}": ARCHIVE_URL,
         "{{PRICE_TOTAL}}": str(len(price_answers)),
         "{{PRICE_ANSWERS}}": "".join(f"<li>{_highlight_price(a)}</li>" for a in price_answers),
         "{{RUN_AT}}": datetime.strptime(run["run_at"][:8], "%Y%m%d").strftime("%b %-d, %Y"),

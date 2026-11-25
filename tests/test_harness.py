@@ -183,7 +183,7 @@ def test_story_refuses_an_incomplete_template(tmp_path, monkeypatch):
     from harness import report
     real = report.ROOT
     for rel in ("results/latest.json", "results/closed_book_resamples.json",
-                "evalset/cases.json", "data/corpus.json"):
+                "evalset/cases.json", "data/corpus.json", "data/wayback_albert_genius_20240505.txt"):
         (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
         (tmp_path / rel).write_text((real / rel).read_text())
     (tmp_path / "report").mkdir()
