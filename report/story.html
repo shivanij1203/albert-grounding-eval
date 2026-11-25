@@ -86,8 +86,6 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4
 [data-state="cancel"] .word .said{text-decoration-color:currentColor}
 [data-state="cancel"] .word .meant{opacity:1;transform:none}
 
-[data-state="method"] .tag{transform:translate(calc(72vw - 50%),calc(48vh - 50%)) scale(.9) rotate(-4deg)}
-[data-state="method"] .tag-inner{transform:rotateY(180deg)}
 [data-state="end"] .tag{transform:translate(calc(50vw - 50%),calc(20vh - 50%)) scale(.78) rotate(-3deg)}
 
 /* ---------- the text that scrolls past the stage ---------- */
@@ -123,14 +121,39 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
 .fixes{list-style:none;margin:28px auto 0;padding:0;display:grid;gap:12px;max-width:520px;text-align:left}
 .fixes li{display:flex;gap:14px;align-items:baseline;padding:16px 18px;border-radius:14px;background:var(--tint);color:var(--ink);font-size:16px;line-height:1.45}
 .fixes li span{flex:none;font:600 13px/1 var(--mono);color:var(--blue)}
-.checks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.checks li{padding-left:22px;position:relative;color:var(--muted)}
-.checks li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--blue)}
 .src{display:block;margin-top:4px;font-size:14px;color:var(--faint)}
+.card.wide{max-width:1040px;width:88vw;margin:0 auto}
+.flow{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr 40px 1fr;align-items:stretch;margin-top:28px}
+.node{display:flex;flex-direction:column;gap:8px;padding:18px;border:1.5px solid var(--line);border-radius:16px;background:var(--bg)}
+.n-num{font:600 12px/1 var(--mono);color:var(--blue)}
+.n-title{font:600 21px/1.2 var(--serif);color:var(--navy)}
+.n-body{font-size:14px;line-height:1.45;color:var(--muted)}
+.chip-q{align-self:flex-start;font-size:13px;padding:4px 10px;border-radius:999px;background:var(--surface);color:var(--ink)}
+.way,.out{display:flex;align-items:center;gap:9px;font-size:14px;line-height:1.35;color:var(--ink)}
+.way i{flex:none;width:22px;height:6px;border-radius:3px}
+.w1{background:var(--faint)} .w2{background:var(--blue);opacity:.6} .w3{background:var(--blue)}
+.out i{flex:none;width:11px;height:11px;border-radius:50%}
+.out i.ok{background:var(--right)} .out i.no{background:var(--wrong)} .out i.hand{background:transparent;border:2px solid var(--blue)}
+.rule{margin-top:auto;font-size:13px;font-weight:600;color:var(--blue)}
+.arrow{align-self:center;width:40px;height:16px;fill:none;stroke:var(--faint);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.flow-note{margin-top:20px!important;font-size:14px;color:var(--faint)!important}
+.js .node,.js .arrow{opacity:0;transform:translateY(10px);transition:opacity 450ms ease,transform 450ms cubic-bezier(.2,.7,.2,1)}
+[data-state="method"] .node,[data-state="method"] .arrow{opacity:1;transform:none}
+[data-state="method"] .flow > :nth-child(2){transition-delay:150ms} [data-state="method"] .flow > :nth-child(3){transition-delay:300ms}
+[data-state="method"] .flow > :nth-child(4){transition-delay:450ms} [data-state="method"] .flow > :nth-child(5){transition-delay:600ms}
+[data-state="method"] .flow > :nth-child(6){transition-delay:750ms} [data-state="method"] .flow > :nth-child(7){transition-delay:900ms}
+[data-state="method"] .tag{opacity:0}
 .end .fine{margin-top:40px;font-size:13px;color:var(--faint);max-width:520px}
 
 /* ---------- small screens: stage on top, text cards underneath ---------- */
 @media (max-width:820px){
+  .card.wide{width:100%}
+  .flow{grid-template-columns:1fr;gap:6px}
+  .arrow{transform:rotate(90deg)!important;justify-self:center;width:28px}
+  .js .arrow{opacity:0}
+  [data-state="method"] .arrow{opacity:1}
+  .method.step{align-items:center}
+  .method .card{border:0;background:transparent;padding:0}
   .tag{transform:translate(calc(50vw - 50%),calc(24vh - 50%)) scale(.95) rotate(-6deg)}
   [data-state="ask"] .tag,[data-state="pages"] .tag,[data-state="quote"] .tag{transform:translate(calc(50vw - 50%),calc(14vh - 50%)) scale(.62) rotate(-4deg)}
   .dots{transform:translate(calc(50vw - 50%),calc(34vh - 50%));grid-template-columns:repeat(7,14px);gap:8px}
@@ -143,7 +166,6 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
   [data-state="instant"] .m3{transform:translate(calc(50vw - 50%),calc(26vh - 50% + 92px)) scale(.9) rotate(-1deg)}
   [data-state="cancel"] .word{transform:translate(calc(50vw - 50%),calc(26vh - 50%)) scale(.85) rotate(-3deg)}
   [data-state="end"] .tag{transform:translate(calc(50vw - 50%),calc(14vh - 50%)) scale(.62) rotate(-3deg)}
-  [data-state="method"] .tag{opacity:0}
   .step{align-items:flex-end;padding:0 20px 8vh}
   .card{width:100%;max-width:none;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:22px}
   .hero .card{border:0;padding:0;background:transparent}
@@ -222,16 +244,42 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
     </div>
   </section>
 
-  <section class="step" data-step="method">
-    <div class="card">
+  <section class="step method" data-step="method">
+    <div class="card wide">
       <h2>How I checked</h2>
-      <ul class="checks">
-        <li>Every answer was checked against Albert's own words: {{HELP}} public help articles, the Terms of Use, and the disclosures on albert.com.</li>
-        <li>Each of the {{N}} questions lists the facts a correct answer must include and the claims that make it wrong, taken from Albert's pages. Every grading rule I changed after seeing answers is logged with the reason.</li>
-        <li>{{REFUSE}} questions can't be answered from Albert's pages, like "what's my limit?" or "should I buy Tesla stock?" A correct answer sends the customer to support instead of guessing.</li>
-        <li>Grading follows fixed rules. No AI graded another AI, and I read every failure by hand.</li>
-        <li>One run of one model ({{MODEL}}), so {{RAG}} versus {{GR}} is a tie, not a win. It says nothing about Genius itself, which needs an account to test.</li>
-      </ul>
+      <div class="flow" role="img" aria-label="Diagram: {{N}} customer questions, each answered three ways, every answer checked against Albert's own pages, then marked right or wrong.">
+        <div class="node">
+          <span class="n-num">01</span>
+          <b class="n-title">{{N}} questions</b>
+          <span class="n-body">What a real Albert customer would ask</span>
+          <span class="chip-q">"How much is Genius?"</span>
+          <span class="chip-q">"Are there late fees?"</span>
+        </div>
+        <svg class="arrow" viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h32M28 3l6 5-6 5"/></svg>
+        <div class="node">
+          <span class="n-num">02</span>
+          <b class="n-title">Answered 3 ways</b>
+          <span class="way"><i class="w1"></i>AI on its own</span>
+          <span class="way"><i class="w2"></i>AI reads the help pages</span>
+          <span class="way"><i class="w3"></i>AI must quote the page</span>
+        </div>
+        <svg class="arrow" viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h32M28 3l6 5-6 5"/></svg>
+        <div class="node">
+          <span class="n-num">03</span>
+          <b class="n-title">Checked against Albert</b>
+          <span class="n-body">{{HELP}} help articles, the Terms of Use, and albert.com disclosures</span>
+          <span class="rule">Fixed rules. No AI grading AI.</span>
+        </div>
+        <svg class="arrow" viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h32M28 3l6 5-6 5"/></svg>
+        <div class="node">
+          <span class="n-num">04</span>
+          <b class="n-title">Right or wrong</b>
+          <span class="out"><i class="ok"></i>Has the key facts, nothing false</span>
+          <span class="out"><i class="no"></i>Missing a fact, or says something false</span>
+          <span class="out"><i class="hand"></i>Can't know? Sends you to support</span>
+        </div>
+      </div>
+      <p class="flow-note">One run of {{MODEL}}, so {{RAG}} vs {{GR}} is a tie. It doesn't test Genius, which needs an account.</p>
     </div>
   </section>
 
@@ -250,6 +298,7 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
 <script id="story" type="application/json">{{STORY_DATA}}</script>
 <script>
 (function () {
+  document.documentElement.classList.add("js");
   var data = JSON.parse(document.getElementById("story").textContent);
   var grid = document.getElementById("dots");
   var count = document.getElementById("count");
