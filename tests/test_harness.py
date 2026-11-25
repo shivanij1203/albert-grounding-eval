@@ -198,3 +198,13 @@ def test_report_builds_from_the_real_template():
     page = report.build()
     assert "{{" not in page.split('<script id="data"')[0]
     assert page.rstrip().endswith("</html>") and len(page) > 20000
+
+
+def test_story_page_builds_with_one_dot_per_question():
+    import re as _re
+    from harness import report
+    page = report.build_story()
+    blob = _re.search(r'<script id="story" type="application/json">(.*?)</script>', page, _re.S).group(1)
+    story = json.loads(blob)
+    assert {len(v) for v in story.values()} == {41}
+    assert "{{" not in page

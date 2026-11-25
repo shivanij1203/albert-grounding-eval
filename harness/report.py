@@ -140,6 +140,10 @@ def _check_narrative(run: dict, cases: dict) -> None:
             passed[(s, "cancel-zero-savings")] for s in ("closed_book", "naive_rag", "grounded")),
         "the AI alone said $14.99 for Genius": "14.99" in next(
             r["answer"] for r in run["results"] if r["system"] == "closed_book" and r["case"] == "price-genius"),
+        "the AI alone capped advances at $250": "$250" in next(
+            r["answer"] for r in run["results"] if r["system"] == "closed_book" and r["case"] == "adv-max"),
+        "the AI alone said advances are due on payday": "payday" in next(
+            r["answer"] for r in run["results"] if r["system"] == "closed_book" and r["case"] == "adv-due"),
         "grounded and naive differ by at most one question": abs(
             run["summary"]["grounded"]["passed"] - run["summary"]["naive_rag"]["passed"]) <= 1,
     }
@@ -148,10 +152,37 @@ def _check_narrative(run: dict, cases: dict) -> None:
         raise ValueError(f"report prose no longer matches the run: {false}")
 
 
+def build_story() -> str:
+    run, review, cases, _ = _load()
+    _check_narrative(run, cases)
+    s = run["summary"]
+    price = review["wrong"]["price-genius"]
+    order = list(dict.fromkeys(r["case"] for r in run["results"]))
+    passed = {(r["system"], r["case"]): r["grade"]["passed"] for r in run["results"]}
+    story = {name: [passed[(name, c)] for c in order] for name in ("closed_book", "naive_rag", "grounded")}
+    template = (ROOT / "report" / "story.html").read_text()
+    if "{{STORY_DATA}}" not in template or "</html>" not in template:
+        raise ValueError("story template is incomplete")
+    fills = {
+        "{{N}}": str(run["cases"]), "{{CB}}": str(s["closed_book"]["passed"]),
+        "{{RAG}}": str(s["naive_rag"]["passed"]), "{{GR}}": str(s["grounded"]["passed"]),
+        "{{PRICE_REPEAT}}": f'{price["resample_wrong"]} of {price["resample_valid"]}',
+        "{{REPO}}": REPO_URL,
+        "{{RUN_AT}}": datetime.strptime(run["run_at"][:8], "%Y%m%d").strftime("%b %-d, %Y"),
+    }
+    for key, value in fills.items():
+        template = template.replace(key, value)
+    if "{{" in template.replace("{{STORY_DATA}}", ""):
+        raise ValueError("unfilled placeholder in story template")
+    return template.replace("{{STORY_DATA}}", json.dumps(story))
+
+
 def main() -> None:
-    out = ROOT / "docs" / "index.html"
-    out.write_text(build())
-    print(f"wrote {out.relative_to(ROOT)}")
+    pages = {"index.html": build_story(), "details.html": build()}
+    for name, html_text in pages.items():
+        out = ROOT / "docs" / name
+        out.write_text(html_text)
+        print(f"wrote {out.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
