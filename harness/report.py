@@ -1,194 +1,90 @@
-"""Render report/index.html from results/latest.json.
+"""Render docs/index.html from results/latest.json and report/story.html.
 
-Every number on the page is computed here from the run file, so the page can't
-drift from the data.
+Every number on the page comes from the run files, and the build refuses to run
+if a sentence on the page no longer matches the data.
 
     python -m harness.report
 """
 from __future__ import annotations
 
 import html
-from datetime import datetime
 import json
+from datetime import datetime
 from pathlib import Path
 
-from harness.systems import RETRIEVAL_K
-
 ROOT = Path(__file__).resolve().parent.parent
-REPO_URL = "https://github.com/shivanij1203/albert-grounding-eval"
-SYSTEM_LABELS = {"closed_book": "AI on its own", "naive_rag": "Reading help pages", "grounded": "Reading and quoting"}
+PRICE_ARTICLE = "help-21583583733271"
+SYSTEMS = ("closed_book", "naive_rag", "grounded")
 
 
-def _load() -> tuple[dict, dict, dict, dict]:
+def _load() -> tuple[dict, dict, dict]:
     run = json.loads((ROOT / "results" / "latest.json").read_text())
-    review = json.loads((ROOT / "evalset" / "closed_book_review.json").read_text())["labels"]
     cases = {c["id"]: c for c in json.loads((ROOT / "evalset" / "cases.json").read_text())["cases"]}
     corpus = {s["id"]: s for s in json.loads((ROOT / "data" / "corpus.json").read_text())}
-    return run, review, cases, corpus
+    return run, cases, corpus
 
 
-def _citation_stats(run: dict) -> dict:
-    rows = [r for r in run["results"] if r["system"] == "grounded"]
-    answered = [r for r in rows if r["status"] == "answered"]
-    return {
-        "answered": len(answered),
-        "handoffs": len(rows) - len(answered),
-        "quotes": sum(len(r["citations"]) for r in answered),
-        "dropped": sum(r["dropped_citations"] for r in rows),
-        "gold_cited": sum(r["grade"]["gold_cited"] for r in answered),
-    }
+def _answer(run: dict, system: str, case: str) -> str:
+    return next(r["answer"] for r in run["results"] if r["system"] == system and r["case"] == case)
 
 
-_PLAIN_REASONS = {
-    "missing fact": "left out a key fact",
-    "forbidden claim": "said something known to be wrong",
-    "should have handed off": "should have sent the customer to support",
-}
-
-
-def _plain_reason(reason: str) -> dict:
-    """A reader-facing label, with the exact grader pattern kept for engineers."""
-    kind = reason.partition(": ")[0]
-    return {"text": _PLAIN_REASONS.get(kind, reason), "detail": reason}
-
-
-def _case_rows(run: dict, cases: dict, corpus: dict) -> list[dict]:
-    by_case: dict[str, dict] = {}
-    for r in run["results"]:
-        entry = by_case.setdefault(r["case"], {"id": r["case"], "category": r["category"],
-                                               "question": r["question"], "why": cases[r["case"]].get("why", ""),
-                                               "answers": {}})
-        entry["answers"][r["system"]] = {
-            "text": r["answer"], "passed": r["grade"]["passed"],
-            "reasons": [_plain_reason(x) for x in r["grade"]["reasons"]],
-            "citations": [{"title": corpus[c["source_id"]]["title"], "url": corpus[c["source_id"]]["url"],
-                           "quote": c["quote"]} for c in r["citations"]],
-        }
-    return list(by_case.values())
-
-
-def build() -> str:
-    run, review, cases, corpus = _load()
-    s = run["summary"]
-    stats = _citation_stats(run)
-    wrong = review["wrong"]
-    closed = {r["case"]: r["answer"] for r in run["results"] if r["system"] == "closed_book"}
-    data = {"cases": _case_rows(run, cases, corpus), "labels": SYSTEM_LABELS}
-    template = (ROOT / "report" / "template.html").read_text()
-    required = ("{{DATA}}", "{{WRONG_ROWS}}", "{{CB}}", "{{RAG}}", "{{GR}}", "</html>")
-    missing = [r for r in required if r not in template]
-    if missing:
-        raise ValueError(f"report template is incomplete, missing {missing}")
-    for cid, row in wrong.items():
-        if row["said"] not in closed[cid].replace("**", ""):
-            raise ValueError(f"review excerpt for {cid} is not in the model's answer")
-    stable = {c: r for c, r in wrong.items() if r["stable"]}
-    unstable = {c: r for c, r in wrong.items() if not r["stable"]}
-
-    def row_html(cid: str, row: dict) -> str:
-        hedge = " <span class='hedge'>hedged</span>" if row["hedged"] else ""
-        return (f'<tr><td class="q">{html.escape(cases[cid]["question"])}</td>'
-                f'<td>"{html.escape(row["said"])}"{hedge}</td>'
-                f'<td>{html.escape(row["fact"])}</td>'
-                f'<td class="rep">{row["resample_wrong"]} of {row["resample_valid"]}</td></tr>')
-
-    wrong_rows = "".join(row_html(c, r) for c, r in stable.items())
-    if unstable:
-        wrong_rows += ('<tr class="divider"><td colspan="4">Wrong in the scored run, '
-                       'but not in most resamples</td></tr>')
-        wrong_rows += "".join(row_html(c, r) for c, r in unstable.items())
-    bad_samples = sum(r["resample_valid"] < 5 and 5 - r["resample_valid"] or 0 for r in wrong.values())
-    fills = {
-        "{{N}}": str(run["cases"]), "{{SOURCES}}": str(run["corpus_sources"]),
-        "{{CB}}": str(s["closed_book"]["passed"]), "{{RAG}}": str(s["naive_rag"]["passed"]),
-        "{{GR}}": str(s["grounded"]["passed"]), "{{WRONG}}": str(len(wrong)), 
-        "{{HEDGE}}": str(len(review["hedge"])), "{{INCOMPLETE}}": str(len(review["incomplete"])),
-        "{{QUOTES}}": str(stats["quotes"]), "{{ANSWERED}}": str(stats["answered"]),
-        "{{HANDOFFS}}": str(stats["handoffs"]), "{{GOLD_CITED}}": str(stats["gold_cited"]),
-        "{{MODEL}}": html.escape(run["model"]), "{{RUN_AT}}": datetime.strptime(run["run_at"][:8], "%Y%m%d").strftime("%b %-d, %Y"),
-        "{{RECALL}}": f'{round(run["retrieval"]["8"] * 100)}', "{{REPO}}": REPO_URL,
-        "{{WRONG_ROWS}}": wrong_rows,
-        "{{CB_PCT}}": _pct(s["closed_book"]["passed"], run["cases"]),
-        "{{RAG_PCT}}": _pct(s["naive_rag"]["passed"], run["cases"]),
-        "{{GR_PCT}}": _pct(s["grounded"]["passed"], run["cases"]),
-        "{{PRICE_REPEAT}}": f'{wrong["price-genius"]["resample_wrong"]} of {wrong["price-genius"]["resample_valid"]}', "{{STABLE}}": str(len(stable)), "{{BAD_SAMPLES}}": str(bad_samples), "{{K}}": str(RETRIEVAL_K),
-        "{{REFUSE}}": str(sum(c["expect"] == "refuse" for c in cases.values())),
-        "{{DATA}}": json.dumps(data).replace("</", "<\\/"),
-    }
-    _check_narrative(run, cases)
-    data_blob = fills.pop("{{DATA}}")
-    for key, value in fills.items():
-        template = template.replace(key, value)
-    if "{{" in template.replace("{{DATA}}", ""):
-        raise ValueError("unfilled placeholder in report template")
-    return template.replace("{{DATA}}", data_blob)
-
-
-def _pct(part: int, whole: int) -> str:
-    return str(round(part / whole * 100, 1))
-
-
-def _check_narrative(run: dict, cases: dict) -> None:
-    """The template's prose makes specific claims about this run. Refuse to build
-    the page if a rerun has made any of them false."""
+def _check_narrative(run: dict, corpus: dict) -> None:
+    """The page makes specific claims about this run. Refuse to build it if a rerun
+    or a corpus refresh has made any of them false."""
     passed = {(r["system"], r["case"]): r["grade"]["passed"] for r in run["results"]}
     claims = {
-        "closed book fails the Instant late-fee question": not passed[("closed_book", "adv-late-fees")],
-        "naive RAG fails the Instant late-fee question": not passed[("naive_rag", "adv-late-fees")],
-        "grounded passes the Instant late-fee question": passed[("grounded", "adv-late-fees")],
-        "all three fail the cancel-without-zeroing question": not any(
-            passed[(s, "cancel-zero-savings")] for s in ("closed_book", "naive_rag", "grounded")),
-        "the AI alone said $14.99 for Genius": "14.99" in next(
-            r["answer"] for r in run["results"] if r["system"] == "closed_book" and r["case"] == "price-genius"),
-        "the AI alone capped advances at $250": "$250" in next(
-            r["answer"] for r in run["results"] if r["system"] == "closed_book" and r["case"] == "adv-max"),
-        "the AI alone said advances are due on payday": "payday" in next(
-            r["answer"] for r in run["results"] if r["system"] == "closed_book" and r["case"] == "adv-due"),
-        "grounded and naive differ by at most one question": abs(
+        "the AI alone capped advances at $250": "$250" in _answer(run, "closed_book", "adv-max"),
+        "the AI alone said advances are due on payday": "payday" in _answer(run, "closed_book", "adv-due"),
+        "page reading fails the Instant late-fee question": not passed[("naive_rag", "adv-late-fees")],
+        "quoting passes the Instant late-fee question": passed[("grounded", "adv-late-fees")],
+        "every version fails the cancel-without-zeroing question": not any(
+            passed[(s, "cancel-zero-savings")] for s in SYSTEMS),
+        "quoting and page reading differ by at most one question": abs(
             run["summary"]["grounded"]["passed"] - run["summary"]["naive_rag"]["passed"]) <= 1,
+        "Albert's price article still says $39.99": "Genius costs $39.99 a month" in corpus[PRICE_ARTICLE]["text"],
+        "the Terms still require $0 balances to cancel": "balance of $0 to cancel your Albert Subscription"
+            in corpus["help-16768060313111"]["text"],
     }
     false = [name for name, ok in claims.items() if not ok]
     if false:
-        raise ValueError(f"report prose no longer matches the run: {false}")
+        raise ValueError(f"page no longer matches the data: {false}")
 
 
 def _price_answers(run: dict) -> list[str]:
     """Every answer the model gave to the Genius price question: the scored run plus the
-    resamples. The hero says "$14.99 every time", so refuse to build if that's not true."""
-    scored = [r["answer"] for r in run["results"]
-              if r["system"] == "closed_book" and r["case"] == "price-genius"]
+    resamples. The page says "$14.99 every time", so refuse to build if that's not true."""
     resamples = json.loads((ROOT / "results" / "closed_book_resamples.json").read_text())
-    answers = [a for a in scored + resamples["answers"]["price-genius"] if a.strip()]
+    answers = [a for a in [_answer(run, "closed_book", "price-genius")] + resamples["answers"]["price-genius"]
+               if a.strip()]
     if not answers or not all("14.99" in a for a in answers):
-        raise ValueError("not every price answer says $14.99; the hero claim is false")
+        raise ValueError("not every price answer says $14.99; the headline is false")
     return answers
 
 
 def _highlight_price(answer: str) -> str:
-    text = html.escape(answer.replace("**", "").strip())
-    return text.replace("$14.99", "<mark>$14.99</mark>")
+    return html.escape(answer.replace("**", "").strip()).replace("$14.99", "<mark>$14.99</mark>")
 
 
 def build_story() -> str:
-    run, review, cases, corpus = _load()
-    _check_narrative(run, cases)
-    s = run["summary"]
+    run, cases, corpus = _load()
+    _check_narrative(run, corpus)
+    summary = run["summary"]
     price_answers = _price_answers(run)
-    if "Genius costs $39.99 a month" not in corpus["help-21583583733271"]["text"]:
-        raise ValueError("Albert's pricing article no longer says $39.99; the hero claim is stale")
-    price = review["wrong"]["price-genius"]
     order = list(dict.fromkeys(r["case"] for r in run["results"]))
     passed = {(r["system"], r["case"]): r["grade"]["passed"] for r in run["results"]}
-    story = {name: [passed[(name, c)] for c in order] for name in ("closed_book", "naive_rag", "grounded")}
+    story = {name: [passed[(name, c)] for c in order] for name in SYSTEMS}
+
     template = (ROOT / "report" / "story.html").read_text()
     if "{{STORY_DATA}}" not in template or "</html>" not in template:
         raise ValueError("story template is incomplete")
     fills = {
-        "{{N}}": str(run["cases"]), "{{CB}}": str(s["closed_book"]["passed"]),
-        "{{RAG}}": str(s["naive_rag"]["passed"]), "{{GR}}": str(s["grounded"]["passed"]),
-        "{{PRICE_REPEAT}}": f'{price["resample_wrong"]} of {price["resample_valid"]}',
-        "{{REPO}}": REPO_URL, "{{MODEL}}": html.escape(run["model"]),
-        "{{PRICE_URL}}": corpus["help-21583583733271"]["url"],
+        "{{N}}": str(run["cases"]), "{{SOURCES}}": str(run["corpus_sources"]),
+        "{{HELP}}": str(sum(s["kind"] == "help" for s in corpus.values())),
+        "{{REFUSE}}": str(sum(c["expect"] == "refuse" for c in cases.values())),
+        "{{CB}}": str(summary["closed_book"]["passed"]),
+        "{{RAG}}": str(summary["naive_rag"]["passed"]), "{{GR}}": str(summary["grounded"]["passed"]),
+        "{{MODEL}}": html.escape(run["model"]),
+        "{{PRICE_URL}}": corpus[PRICE_ARTICLE]["url"],
         "{{PRICE_TOTAL}}": str(len(price_answers)),
         "{{PRICE_ANSWERS}}": "".join(f"<li>{_highlight_price(a)}</li>" for a in price_answers),
         "{{RUN_AT}}": datetime.strptime(run["run_at"][:8], "%Y%m%d").strftime("%b %-d, %Y"),
@@ -201,11 +97,9 @@ def build_story() -> str:
 
 
 def main() -> None:
-    pages = {"index.html": build_story(), "details.html": build()}
-    for name, html_text in pages.items():
-        out = ROOT / "docs" / name
-        out.write_text(html_text)
-        print(f"wrote {out.relative_to(ROOT)}")
+    out = ROOT / "docs" / "index.html"
+    out.write_text(build_story())
+    print(f"wrote {out.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

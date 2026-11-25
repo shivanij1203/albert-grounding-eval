@@ -86,7 +86,9 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4
 [data-state="cancel"] .word .said{text-decoration-color:currentColor}
 [data-state="cancel"] .word .meant{opacity:1;transform:none}
 
-[data-state="end"] .tag{transform:translate(calc(50vw - 50%),calc(30vh - 50%)) scale(.9) rotate(-3deg)}
+[data-state="method"] .tag{transform:translate(calc(72vw - 50%),calc(48vh - 50%)) scale(.9) rotate(-4deg)}
+[data-state="method"] .tag-inner{transform:rotateY(180deg)}
+[data-state="end"] .tag{transform:translate(calc(50vw - 50%),calc(20vh - 50%)) scale(.78) rotate(-3deg)}
 
 /* ---------- the text that scrolls past the stage ---------- */
 .steps{position:relative;z-index:1}
@@ -118,10 +120,13 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
 
 .end{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:0 6vw 12vh}
 .end .card{width:auto;max-width:560px}
-.actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
-.btn{display:inline-block;padding:13px 22px;border-radius:999px;font:600 15px var(--sans);text-decoration:none;border:1.5px solid var(--navy);color:var(--navy);transition:background-color 150ms ease,color 150ms ease}
-.btn.primary{background:var(--navy);color:var(--bg)}
-.btn:hover{background:var(--blue);border-color:var(--blue);color:var(--bg)}
+.fixes{list-style:none;margin:28px auto 0;padding:0;display:grid;gap:12px;max-width:520px;text-align:left}
+.fixes li{display:flex;gap:14px;align-items:baseline;padding:16px 18px;border-radius:14px;background:var(--tint);color:var(--ink);font-size:16px;line-height:1.45}
+.fixes li span{flex:none;font:600 13px/1 var(--mono);color:var(--blue)}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.checks li{padding-left:22px;position:relative;color:var(--muted)}
+.checks li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.src{display:block;margin-top:4px;font-size:14px;color:var(--faint)}
 .end .fine{margin-top:40px;font-size:13px;color:var(--faint);max-width:520px}
 
 /* ---------- small screens: stage on top, text cards underneath ---------- */
@@ -137,7 +142,8 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
   [data-state="instant"] .m2{transform:translate(calc(50vw - 50%),calc(26vh - 50%)) scale(.9) rotate(2deg)}
   [data-state="instant"] .m3{transform:translate(calc(50vw - 50%),calc(26vh - 50% + 92px)) scale(.9) rotate(-1deg)}
   [data-state="cancel"] .word{transform:translate(calc(50vw - 50%),calc(26vh - 50%)) scale(.85) rotate(-3deg)}
-  [data-state="end"] .tag{transform:translate(calc(50vw - 50%),calc(26vh - 50%)) scale(.8) rotate(-3deg)}
+  [data-state="end"] .tag{transform:translate(calc(50vw - 50%),calc(14vh - 50%)) scale(.62) rotate(-3deg)}
+  [data-state="method"] .tag{opacity:0}
   .step{align-items:flex-end;padding:0 20px 8vh}
   .card{width:100%;max-width:none;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:22px}
   .hero .card{border:0;padding:0;background:transparent}
@@ -204,25 +210,38 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
   <section class="step" data-step="instant">
     <div class="card">
       <h2>The most useful finding wasn't about the AI.</h2>
-      <p>Albert uses <b>"Instant"</b> for three products with different fees, and the help pages don't say which one they mean. Given both pages, the AI would tell a customer that Albert's own pages contradict each other.</p>
-      <p>A product tag on each article would fix it for any assistant.</p>
+      <p>Albert's Terms of Use define three <b>"Instant"</b> products with different fees, shown here. The help pages use "Instant" and "advance" for all three without saying which one they mean. The article titled "How does Instant advance repayment work?" describes the line of credit's late fees. Given both pages, the AI would tell a customer that Albert's own pages contradict each other.</p>
     </div>
   </section>
 
   <section class="step" data-step="cancel">
     <div class="card">
       <h2>Customers say "cancel." The help page says "deactivate."</h2>
-      <p>It was the one question every version got wrong. Putting the customer's word in the article title would fix it for any search.</p>
+      <p>"Can I cancel Genius without emptying my savings first?" was the one question every version got wrong. Albert's answer is clear, but it lives under a word customers don't search for:</p>
+      <p><b>"You must have an Albert Savings and/or Albert Investing balance of $0 to cancel your Albert Subscription."</b><span class="src">Albert's Terms of Use, and the help article "Deactivating or closing your Albert account"</span></p>
+    </div>
+  </section>
+
+  <section class="step" data-step="method">
+    <div class="card">
+      <h2>How I checked</h2>
+      <ul class="checks">
+        <li>Every answer was checked against Albert's own words: {{HELP}} public help articles, the Terms of Use, and the disclosures on albert.com.</li>
+        <li>Each of the {{N}} questions lists the facts a correct answer must include and the claims that make it wrong, taken from Albert's pages. Every grading rule I changed after seeing answers is logged with the reason.</li>
+        <li>{{REFUSE}} questions can't be answered from Albert's pages, like "what's my limit?" or "should I buy Tesla stock?" A correct answer sends the customer to support instead of guessing.</li>
+        <li>Grading follows fixed rules. No AI graded another AI, and I read every failure by hand.</li>
+        <li>One run of one model ({{MODEL}}), so {{RAG}} versus {{GR}} is a tie, not a win. It says nothing about Genius itself, which needs an account to test.</li>
+      </ul>
     </div>
   </section>
 
   <section class="end" data-step="end">
     <div class="card">
-      <h2>Every answer, every source, and the method are in the full write-up.</h2>
-      <div class="actions">
-        <a class="btn primary" href="details.html">Read the full write-up</a>
-        <a class="btn" href="{{REPO}}">Code on GitHub</a>
-      </div>
+      <h2>Two small content fixes could make any assistant more accurate.</h2>
+      <ol class="fixes">
+        <li><span>01</span>Tag each help article with the one product it covers, and name the product in its title.</li>
+        <li><span>02</span>Put the word customers use, "cancel," in the title of the cancellation article.</li>
+      </ol>
       <p class="fine">Built by Shivani Jagannatham as an independent work sample. Not affiliated with or endorsed by Albert. Every fact about Albert comes from its public help center and website, as of {{RUN_AT}}.</p>
     </div>
   </section>

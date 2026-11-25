@@ -179,25 +179,18 @@ def test_parse_grounded_skips_stray_braces():
     assert systems.parse_grounded(text).status == "refused"
 
 
-def test_report_refuses_an_incomplete_template(tmp_path, monkeypatch):
+def test_story_refuses_an_incomplete_template(tmp_path, monkeypatch):
     from harness import report
     real = report.ROOT
-    fake = tmp_path
-    for rel in ("results/latest.json", "evalset/closed_book_review.json", "evalset/cases.json", "data/corpus.json"):
-        (fake / rel).parent.mkdir(parents=True, exist_ok=True)
-        (fake / rel).write_text((real / rel).read_text())
-    (fake / "report").mkdir()
-    (fake / "report" / "template.html").write_text("")
-    monkeypatch.setattr(report, "ROOT", fake)
+    for rel in ("results/latest.json", "results/closed_book_resamples.json",
+                "evalset/cases.json", "data/corpus.json"):
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_text((real / rel).read_text())
+    (tmp_path / "report").mkdir()
+    (tmp_path / "report" / "story.html").write_text("")
+    monkeypatch.setattr(report, "ROOT", tmp_path)
     with pytest.raises(ValueError, match="incomplete"):
-        report.build()
-
-
-def test_report_builds_from_the_real_template():
-    from harness import report
-    page = report.build()
-    assert "{{" not in page.split('<script id="data"')[0]
-    assert page.rstrip().endswith("</html>") and len(page) > 20000
+        report.build_story()
 
 
 def test_story_page_builds_with_one_dot_per_question():
