@@ -201,3 +201,12 @@ def test_story_page_builds_with_one_dot_per_question():
     story = json.loads(blob)
     assert {len(v) for v in story.values()} == {41}
     assert "{{" not in page
+
+
+def test_story_page_loads_the_3d_tags_with_a_flat_fallback():
+    from harness import report
+    page = report.build_story()
+    assert '"three":"./vendor/three.module.min.js"' in page
+    assert 'src="./tag3d.js"' in page
+    assert 'class="tag"' in page  # flat tags stay as the fallback when WebGL is missing
+    assert (report.ROOT / "docs" / "vendor" / "three.module.min.js").exists()

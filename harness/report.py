@@ -100,6 +100,9 @@ def main() -> None:
     out = ROOT / "docs" / "index.html"
     out.write_text(build_story())
     print(f"wrote {out.relative_to(ROOT)}")
+    script = ROOT / "docs" / "tag3d.js"
+    script.write_text((ROOT / "report" / "tag3d.js").read_text())
+    print(f"wrote {script.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

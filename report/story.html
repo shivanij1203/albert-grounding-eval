@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js","three/addons/":"./vendor/addons/"}}</script>
+<script type="module" src="./tag3d.js"></script>
 <style>
 /* Palette from albert.com: ink #222, blue #1548C0, navy #031F49, tints #F2F4FF / #E5E9FF, surface #F2F3F7. */
 :root{
@@ -33,6 +35,8 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4
 
 /* ---------- the stage: one fixed layer that holds the traveling tag ---------- */
 .stage{position:fixed;inset:0;pointer-events:none;z-index:0;isolation:isolate}
+.stage canvas.tags3d{position:absolute;inset:0;width:100%;height:100%}
+.webgl .stage .tag,.webgl .stage .mini,.webgl .stage .word{visibility:hidden}
 .tag,.mini,.word,.dots{position:absolute;left:0;top:0;transition:transform var(--move),opacity 400ms ease}
 
 /* Paper hang tags: manila card, angled hole end, metal eyelet, twine. Paper keeps its color in dark mode, like a real object. */
@@ -184,6 +188,8 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
   .step{align-items:flex-end;padding:0 20px 8vh}
   .card{width:100%;max-width:none;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:22px}
   .hero .card{border:0;padding:0;background:transparent}
+  .hero .card{width:100%;max-width:none}
+  .step.hero{padding-top:26vh;align-items:flex-start}
   .end .card{border:0;background:transparent;padding:0}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
