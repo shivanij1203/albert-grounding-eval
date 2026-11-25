@@ -23,8 +23,8 @@
   --move:700ms cubic-bezier(.2,.7,.2,1);
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#141518; --surface:#1c1d22; --ink:#f2f2f2; --muted:#b4b6c0; --faint:#8a8d99; --line:#2a2c33;
-  --blue:#80b2ff; --navy:#e5e9ff; --tint:#192240; --tint-2:#22305a;
+  --bg:#151619; --surface:#1c1d22; --ink:#f2f2f2; --muted:#b4b6c0; --faint:#8a8d99; --line:#2a2c33;
+  --blue:#8fb4ff; --navy:#f3f3f5; --tint:#192240; --tint-2:#22305a;
   --right:#7fd3a6; --wrong:#f19a88; --wrong-tint:#2e1915; --idle:#33363f;
 }}
 *{box-sizing:border-box}
@@ -63,15 +63,18 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4
 .hero .card{max-width:600px;width:48vw}
 .hero h1{font-size:clamp(38px,4.6vw,60px)}
 .hero .card p.cue{margin-top:28px}
-.eyebrow{display:block;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:22px}
-h1{font:600 clamp(40px,5.6vw,68px)/1.04 var(--serif);letter-spacing:-.02em;color:var(--navy);margin:0 0 24px;text-wrap:balance}
+.eyebrow{display:block;font:600 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:22px}
+h1{font:600 clamp(40px,5.2vw,64px)/1.04 var(--serif);letter-spacing:-.02em;color:var(--navy);margin:0 0 24px;text-wrap:balance}
 h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;color:var(--navy);margin:0 0 16px;text-wrap:balance}
 .card p{margin:0 0 14px;color:var(--muted)}
 .card p b{color:var(--ink);font-weight:600}
-.lead{font-size:20px;line-height:1.5}
+.lead{font-size:19px;line-height:1.55;max-width:46ch}
+.lead a{color:inherit;text-decoration-color:var(--faint)}
+.receipt a{text-decoration:none}
+.receipt a:hover{text-decoration:underline}
 .receipt{margin-top:24px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:14px;color:var(--muted);pointer-events:auto}
 .receipt > div{display:flex;gap:12px;padding:3px 0}
-.receipt span{flex:none;width:52px;font:500 11px/1.9 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.receipt span{flex:none;width:58px;font:600 11px/1.9 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
 .receipt details{margin-top:6px;border-top:1px solid var(--line);padding-top:8px}
 .receipt summary{cursor:pointer;font-weight:600;color:var(--blue);list-style:none}
 .receipt summary::-webkit-details-marker{display:none}
@@ -81,7 +84,7 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
 .receipt ol{margin:10px 0 2px;padding-left:20px;max-height:220px;overflow:auto}
 .receipt li{margin-bottom:8px;line-height:1.45}
 .receipt mark{background:var(--wrong-tint);color:var(--wrong);font-weight:600;padding:0 2px;border-radius:3px}
-.cue{margin-top:36px;font:500 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.cue{margin-top:36px;font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
 .num{font-variant-numeric:tabular-nums}
 
 .end{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:0 6vw 12vh}
@@ -148,10 +151,10 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
     <div class="card">
       <span class="eyebrow">A work sample by Shivani Jagannatham</span>
       <h1>I asked an AI what Albert Genius costs. It said $14.99.</h1>
-      <p class="lead">Albert charges $39.99. The AI wasn't making it up: Albert's own Genius page listed <a href="https://web.archive.org/web/20240505195442/https://albert.com/genius">$14.99 a month in 2024</a>. An AI answering from memory still says it. This wasn't Albert's assistant, just a general-purpose AI with no access to Albert's pages. So I asked it 41 questions an Albert customer might ask, and checked every answer against what Albert publishes now.</p>
+      <p class="lead">Albert charges $39.99. The AI wasn't inventing it: <a href="https://web.archive.org/web/20240505195442/https://albert.com/genius">$14.99 was Albert's own price in 2024</a>, and a model answering from memory still repeats it.</p>
       <div class="receipt">
         <div><span>Asked</span>"How much does Albert Genius cost per month?"</div>
-        <div><span>Model</span>claude-sonnet-5-5, on Nov 25, 2026, 6 times. $14.99 every time.</div>
+        <div><span>Model</span>claude-sonnet-5-5, a general-purpose AI with no access to Albert's pages. Asked 6 times on Nov 25, 2026: $14.99 every time.</div>
         <div><span>Albert</span><a href="https://help.albert.com/hc/en-us/articles/21583583733271-How-much-does-Albert-cost">"Genius costs $39.99 a month."</a> &nbsp;Albert's help center, today</div>
         <div><span>Before</span><a href="https://web.archive.org/web/20240505195442/https://albert.com/genius">"costs $14.99/month"</a> &nbsp;albert.com/genius, archived May 2024</div>
         <details>
@@ -165,8 +168,8 @@ h2{font:600 clamp(28px,3.4vw,40px)/1.12 var(--serif);letter-spacing:-.015em;colo
 
   <section class="step" data-step="ask">
     <div class="card">
-      <h2>On its own, it got <span class="num">14</span> of <span class="num">41</span> right.</h2>
-      <p>It also capped advances at $250 (Albert now says $1,000) and said they're due on payday (Albert says 6 days). The $14.99 and the $250 were both on Albert's site in 2024. A model trained on the old web keeps repeating them, and that's what any assistant falls back on whenever it can't find the right page.</p>
+      <h2>I asked it 41 customer questions. On its own, it got <span class="num">14</span> right.</h2>
+      <p>It also capped advances at $250 (now $1,000) and said they're due on payday (Albert says 6 days). Both old numbers were on Albert's site in 2024, and they're what any assistant falls back on when it can't find the right page.</p>
     </div>
   </section>
 

@@ -19,11 +19,17 @@ const SCREEN_INSET = 0.028;
 const SCR_W = 780;
 const SCR_H = Math.round((SCR_W * (PHONE_H - 2 * SCREEN_INSET)) / (PHONE_W - 2 * SCREEN_INSET));
 
-const C = {
-  bg: "#ffffff", ink: "#16181d", soft: "#6b7080", line: "#e6e8ee",
+const LIGHT_UI = {
+  bg: "#ffffff", ink: "#16181d", soft: "#6b7080", line: "#e6e8ee", card: "#ffffff", input: "#f4f5f8", hint: "#9a9ea9",
   user: "#1548c0", ai: "#eff1f5", red: "#c4372a", redBg: "#fbebe7",
   green: "#1d6b45", greenBg: "#e6f2ec", tint: "#f2f4ff", navy: "#031f49",
 };
+const DARK_UI = {
+  bg: "#0d0d0f", ink: "#f2f2f5", soft: "#8e8e96", line: "#26262b", card: "#17171b", input: "#1c1c21", hint: "#6e6e76",
+  user: "#2a5bd7", ai: "#232328", red: "#ff7b6b", redBg: "#3a1a16",
+  green: "#6fd39c", greenBg: "#13281d", tint: "#1b2440", navy: "#c9d6ff",
+};
+let C = DARK.matches ? DARK_UI : LIGHT_UI;
 const SANS = '"Inter", system-ui, sans-serif';
 const SERIF = '"Newsreader", Georgia, serif';
 
@@ -170,7 +176,7 @@ function card(g, y, title, lines, accent) {
   font(g, 500, 32);
   const wrapped = lines.flatMap(([t, color]) => wrap(g, t, SCR_W - 2 * PAD - 48).map((l) => [l, color]));
   const h = 78 + wrapped.length * 46;
-  roundRect(g, PAD, y, SCR_W - 2 * PAD, h, 24, "#ffffff", C.line);
+  roundRect(g, PAD, y, SCR_W - 2 * PAD, h, 24, C.card, C.line);
   g.fillStyle = accent;
   g.fillRect(PAD, y + 18, 5, h - 36);
   font(g, 600, 24);
@@ -193,6 +199,7 @@ function chrome(g, subtitle) {
   g.textBaseline = "middle";
   g.fillText("9:41", 60, 52);
   roundRect(g, SCR_W / 2 - 92, 26, 184, 54, 27, "#000000");
+  g.fillStyle = C.ink;
   g.fillRect(SCR_W - 120, 42, 54, 22);
   g.beginPath();
   g.arc(SCR_W - 160, 53, 9, 0, Math.PI * 2);
@@ -218,11 +225,11 @@ function chrome(g, subtitle) {
   font(g, 500, 24);
   g.fillStyle = C.soft;
   g.fillText(subtitle, PAD + 74, 160);
-  roundRect(g, PAD, SCR_H - 130, SCR_W - 2 * PAD, 80, 40, "#f4f5f8", C.line);
+  roundRect(g, PAD, SCR_H - 130, SCR_W - 2 * PAD, 80, 40, C.input, C.line);
   font(g, 500, 28);
-  g.fillStyle = "#9a9ea9";
+  g.fillStyle = C.hint;
   g.fillText("Ask anything", PAD + 32, SCR_H - 88);
-  roundRect(g, SCR_W / 2 - 110, SCR_H - 30, 220, 10, 5, "#16181d");
+  roundRect(g, SCR_W / 2 - 110, SCR_H - 30, 220, 10, 5, C.ink);
 }
 
 const between = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
@@ -408,7 +415,12 @@ async function start(stage) {
   wall.position.z = -0.4;
   wall.receiveShadow = true;
   scene.add(wall);
-  const syncWall = () => { wall.material.opacity = DARK.matches ? 0.4 : 0.18; };
+  let dirty = true;
+  const syncWall = () => {
+    wall.material.opacity = DARK.matches ? 0.4 : 0.18;
+    C = DARK.matches ? DARK_UI : LIGHT_UI;
+    dirty = true;
+  };
   syncWall();
   DARK.addEventListener("change", syncWall);
 
@@ -416,7 +428,6 @@ async function start(stage) {
   scene.add(phone.group);
 
   let mobile = window.innerWidth <= 820;
-  let dirty = true;
   window.addEventListener("resize", () => {
     mobile = window.innerWidth <= 820;
     camera.aspect = window.innerWidth / window.innerHeight;
