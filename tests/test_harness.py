@@ -203,10 +203,18 @@ def test_story_page_builds_with_one_dot_per_question():
     assert "{{" not in page
 
 
-def test_story_page_loads_the_3d_tags_with_a_flat_fallback():
+def test_story_page_loads_the_3d_phone_with_a_flat_fallback():
     from harness import report
     page = report.build_story()
     assert '"three":"./vendor/three.module.min.js"' in page
-    assert 'src="./tag3d.js"' in page
-    assert 'class="tag"' in page  # flat tags stay as the fallback when WebGL is missing
+    assert 'src="./phone3d.js"' in page
+    assert 'class="phone-flat"' in page  # flat phone is the fallback when WebGL is missing
     assert (report.ROOT / "docs" / "vendor" / "three.module.min.js").exists()
+
+
+def test_phone_messages_are_verbatim_model_answers():
+    from harness import report
+    run, cases, corpus = report._load()
+    data = report._phone_data(run, cases, corpus)
+    assert "$14.99" in data["wrong"] and "$39.99" in data["read"]
+    assert data["wrong"] in report._answer(run, "closed_book", "price-genius")

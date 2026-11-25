@@ -8,6 +8,7 @@ if a sentence on the page no longer matches the data.
 from __future__ import annotations
 
 import html
+import re
 import json
 from datetime import datetime
 from pathlib import Path
@@ -65,6 +66,50 @@ def _highlight_price(answer: str) -> str:
     return html.escape(answer.replace("**", "").strip()).replace("$14.99", "<mark>$14.99</mark>")
 
 
+def _sentence_with(text: str, phrase: str) -> str:
+    """The sentence of `text` that contains `phrase`, exactly as the model wrote it."""
+    for sentence in re.split(r"(?<=[.!?])\s+", text):
+        if phrase in sentence:
+            return sentence.strip()
+    raise ValueError(f"no sentence containing {phrase!r}")
+
+
+def _phone_data(run: dict, cases: dict, corpus: dict) -> dict:
+    """Everything the phone screen shows. AI messages are exact excerpts of saved
+    answers, so the page can't put words in the model's mouth."""
+    grounded_price = next(r for r in run["results"] if r["system"] == "grounded" and r["case"] == "price-genius")
+    data = {
+        "price_q": cases["price-genius"]["question"],
+        "wrong": _sentence_with(_answer(run, "closed_book", "price-genius"), "$14.99").rstrip(",").split(", though")[0],
+        "read": _sentence_with(_answer(run, "naive_rag", "price-genius"), "$39.99"),
+        "quoted": _sentence_with(grounded_price["answer"], "$39.99"),
+        "quote": next(c["quote"] for c in grounded_price["citations"] if "39.99" in c["quote"]),
+        "source": corpus[PRICE_ARTICLE]["title"],
+        "fees_q": cases["adv-late-fees"]["question"],
+        "conflict": _sentence_with(_answer(run, "naive_rag", "adv-late-fees"), "conflicts with"),
+        "conflict_mark": "conflicts with",
+        "cancel_q": cases["cancel-zero-savings"]["question"],
+        "cancel_wrong": _sentence_with(_answer(run, "closed_book", "cancel-zero-savings"), "shouldn't need").split(",")[0],
+        "terms": "You must have an Albert Savings and/or Albert Investing balance of $0 to cancel your Albert Subscription.",
+    }
+    checks = {
+        "wrong": _answer(run, "closed_book", "price-genius"),
+        "cancel_wrong": _answer(run, "closed_book", "cancel-zero-savings"),
+        "read": _answer(run, "naive_rag", "price-genius"),
+        "quoted": grounded_price["answer"],
+        "conflict": _answer(run, "naive_rag", "adv-late-fees"),
+        "terms": corpus["help-16768060313111"]["text"],
+    }
+    for key, source in checks.items():
+        if data[key].rstrip(".") not in source:
+            raise ValueError(f"phone message {key!r} is not a verbatim excerpt")
+    if data["quote"] not in corpus[PRICE_ARTICLE]["text"]:
+        raise ValueError("phone quote is not on Albert's price page")
+    if data["conflict_mark"] not in data["conflict"]:
+        raise ValueError("phone highlight is not in the conflict sentence")
+    return data
+
+
 def build_story() -> str:
     run, cases, corpus = _load()
     _check_narrative(run, corpus)
@@ -73,6 +118,7 @@ def build_story() -> str:
     order = list(dict.fromkeys(r["case"] for r in run["results"]))
     passed = {(r["system"], r["case"]): r["grade"]["passed"] for r in run["results"]}
     story = {name: [passed[(name, c)] for c in order] for name in SYSTEMS}
+    phone = _phone_data(run, cases, corpus)
 
     template = (ROOT / "report" / "story.html").read_text()
     if "{{STORY_DATA}}" not in template or "</html>" not in template:
@@ -88,20 +134,22 @@ def build_story() -> str:
         "{{PRICE_TOTAL}}": str(len(price_answers)),
         "{{PRICE_ANSWERS}}": "".join(f"<li>{_highlight_price(a)}</li>" for a in price_answers),
         "{{RUN_AT}}": datetime.strptime(run["run_at"][:8], "%Y%m%d").strftime("%b %-d, %Y"),
+        "{{PRICE_Q}}": html.escape(phone["price_q"]), "{{WRONG}}": html.escape(phone["wrong"]),
     }
     for key, value in fills.items():
         template = template.replace(key, value)
-    if "{{" in template.replace("{{STORY_DATA}}", ""):
+    if "{{" in template.replace("{{STORY_DATA}}", "").replace("{{PHONE_DATA}}", ""):
         raise ValueError("unfilled placeholder in story template")
-    return template.replace("{{STORY_DATA}}", json.dumps(story))
+    return (template.replace("{{STORY_DATA}}", json.dumps(story))
+            .replace("{{PHONE_DATA}}", json.dumps(phone).replace("</", "<\\/")))
 
 
 def main() -> None:
     out = ROOT / "docs" / "index.html"
     out.write_text(build_story())
     print(f"wrote {out.relative_to(ROOT)}")
-    script = ROOT / "docs" / "tag3d.js"
-    script.write_text((ROOT / "report" / "tag3d.js").read_text())
+    script = ROOT / "docs" / "phone3d.js"
+    script.write_text((ROOT / "report" / "phone3d.js").read_text())
     print(f"wrote {script.relative_to(ROOT)}")
 
 
